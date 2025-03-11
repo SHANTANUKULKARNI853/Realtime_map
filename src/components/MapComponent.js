@@ -59,7 +59,7 @@ const MapComponent = ({ start, destination, transportMode }) => {
 const fetchRoute = async () => {
     try {
         const profile = transportMode === "driving" ? "car" : transportMode;
-        const routeURL = `http://router.project-osrm.org/route/v1/${profile}/${start[1]},${start[0]};${destination[1]},${destination[0]}?geometries=geojson&overview=full`;
+        const routeURL = `https://router.project-osrm.org/route/v1/${profile}/${start[1]},${start[0]};${destination[1]},${destination[0]}?geometries=geojson&overview=full`;
 
         const response = await fetch(routeURL);
         const data = await response.json();
