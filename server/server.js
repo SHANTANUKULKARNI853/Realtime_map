@@ -9,6 +9,7 @@ app.use(cors());
 
 app.get("/route", async (req, res) => {
     const { profile, startLng, startLat, destLng, destLat } = req.query;
+    // Use HTTPS instead of HTTP
     const osrmUrl = `https://router.project-osrm.org/route/v1/${profile}/${startLng},${startLat};${destLng},${destLat}?geometries=geojson&overview=full`;
 
     try {
