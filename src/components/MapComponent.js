@@ -56,43 +56,47 @@ const MapComponent = ({ start, destination, transportMode }) => {
 
     // Fetch Route
     // Fetch Route
+// Fetch Route
 const fetchRoute = async () => {
-    try {
-        const profile = transportMode === "driving" ? "car" : transportMode;
-        const routeURL = `https://router.project-osrm.org/route/v1/${profile}/${start[1]},${start[0]};${destination[1]},${destination[0]}?geometries=geojson&overview=full`;
+  try {
+      const profile = "driving"; // Use "driving" consistently
+      const routeURL = `https://router.project-osrm.org/route/v1/${profile}/${start[1]},${start[0]};${destination[1]},${destination[0]}?geometries=geojson&overview=full`;
 
-        const response = await fetch(routeURL);
-        const data = await response.json();
+      const response = await fetch(routeURL);
 
-        if (data.routes && data.routes.length > 0) {
-            const route = data.routes[0];
-            const coordinates = route.geometry.coordinates;
-            const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-            // Calculate distance (in km) and duration (in minutes)
-            // Calculate distance (in km) and duration (in hours and minutes)
-const distance = (route.distance / 1000).toFixed(2); // Convert meters to km
-const hours = Math.floor(route.duration / 3600); // Convert seconds to hours
-const minutes = Math.floor((route.duration % 3600) / 60); // Remaining minutes
+      const data = await response.json();
 
-const duration = hours > 0 ? `${hours} hrs ${minutes} mins` : `${minutes} mins`;
+      if (data.routes && data.routes.length > 0) {
+          const route = data.routes[0];
+          const coordinates = route.geometry.coordinates;
+          const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
 
+          // Calculate distance and duration
+          const distance = (route.distance / 1000).toFixed(2); // km
+          const hours = Math.floor(route.duration / 3600); // hours
+          const minutes = Math.floor((route.duration % 3600) / 60); // minutes
+          const duration = hours > 0 ? `${hours} hrs ${minutes} mins` : `${minutes} mins`;
 
-            // Draw Route
-            const polyline = L.polyline(latLngs, { color: "blue" }).addTo(map);
-            map.fitBounds(polyline.getBounds());
+          // Draw Route
+          const polyline = L.polyline(latLngs, { color: "blue" }).addTo(map);
+          map.fitBounds(polyline.getBounds());
 
-            // Add distance and duration as a popup
-            L.popup()
-                .setLatLng(latLngs[0])
-                .setContent(`Distance: ${distance} km<br>Duration: ${duration} mins`)
-                .openOn(map);
-        } else {
-            alert("No route data available");
-        }
-    } catch (error) {
-        console.error("Error fetching route:", error);
-    }
+          // Add distance and duration as a popup
+          L.popup()
+              .setLatLng(latLngs[0])
+              .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
+              .openOn(map);
+      } else {
+          alert("No route data available. Please check the locations.");
+      }
+  } catch (error) {
+      console.error("Error fetching route:", error);
+      alert("Error fetching route: " + error.message);
+  }
 };
 
 
