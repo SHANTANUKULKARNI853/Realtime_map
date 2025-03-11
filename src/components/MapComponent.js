@@ -3,26 +3,6 @@ import L from "leaflet";
 
 const MapComponent = ({ start, destination, transportMode }) => {
   const [mapView, setMapView] = useState("standard");
-  const [startCity, setStartCity] = useState("Fetching...");
-  const [destinationCity, setDestinationCity] = useState("Fetching...");
-
-  // Function to get the city name from latitude and longitude
-  const getCityName = async (lat, lng) => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
-      );
-      const data = await response.json();
-      if (data && data.address) {
-        return data.address.city || data.address.town || data.address.village || "Unknown Location";
-      } else {
-        return "Unknown Location";
-      }
-    } catch (error) {
-      console.error("Error getting city name:", error);
-      return "Unknown Location";
-    }
-  };
 
   useEffect(() => {
     // Fix for map container already initialized error
@@ -68,38 +48,26 @@ const MapComponent = ({ start, destination, transportMode }) => {
           : '&copy; OpenStreetMap contributors | CartoDB',
     }).addTo(map);
 
-    // Fetch city names for start and destination
-    const fetchCityNames = async () => {
-      const startCityName = await getCityName(start[0], start[1]);
-      const destinationCityName = await getCityName(destination[0], destination[1]);
-
-      setStartCity(startCityName);
-      setDestinationCity(destinationCityName);
-    };
-
-    fetchCityNames();
-
     // Add Start Marker (Blue)
-    L.marker(start, { icon: blueIcon })
-      .addTo(map)
-      .bindPopup(`Start Location: ${startCity}`)
-      .openPopup();
+    L.marker(start, { icon: blueIcon }).addTo(map).bindPopup("Start Location").openPopup();
 
     // Add Destination Marker (Red)
-    L.marker(destination, { icon: redIcon })
-      .addTo(map)
-      .bindPopup(`Destination: ${destinationCity}`);
+    L.marker(destination, { icon: redIcon }).addTo(map).bindPopup("Destination");
 
     // Fetch Route
-    const fetchRoute = async () => {
-      try {
-        const profile = transportMode === "driving" ? "car" : transportMode;
-        const routeURL = `https://realtime-map-o0ct.onrender.com/route?profile=${profile}&startLng=${start[1]}&startLat=${start[0]}&destLng=${destination[1]}&destLat=${destination[0]}`;
+    // Fetch Route
+// Fetch Route
+// Fetch Route
+// Fetch Route
+const fetchRoute = async () => {
+  try {
+      const profile = transportMode === "driving" ? "car" : transportMode;
+      const routeURL = `https://realtime-map-o0ct.onrender.com/route?profile=${profile}&startLng=${start[1]}&startLat=${start[0]}&destLng=${destination[1]}&destLat=${destination[0]}`;
 
-        const response = await fetch(routeURL);
-        const data = await response.json();
+      const response = await fetch(routeURL);
+      const data = await response.json();
 
-        if (data.routes && data.routes.length > 0) {
+      if (data.routes && data.routes.length > 0) {
           const route = data.routes[0];
           const coordinates = route.geometry.coordinates;
           const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
@@ -113,27 +81,27 @@ const MapComponent = ({ start, destination, transportMode }) => {
           map.fitBounds(polyline.getBounds());
 
           L.popup()
-            .setLatLng(latLngs[0])
-            .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
-            .openOn(map);
-        } else {
+              .setLatLng(latLngs[0])
+              .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
+              .openOn(map);
+      } else {
           alert("No route data available");
-        }
-      } catch (error) {
-        console.error("Error fetching route:", error);
       }
-    };
+  } catch (error) {
+      console.error("Error fetching route:", error);
+  }
+};
+
 
     fetchRoute();
 
     return () => {
       map.remove();
     };
-  }, [start, destination, transportMode, mapView, startCity, destinationCity]);
+  }, [start, destination, transportMode, mapView]);
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h3>From: {startCity} - To: {destinationCity}</h3>
       <select
         value={mapView}
         onChange={(e) => setMapView(e.target.value)}
