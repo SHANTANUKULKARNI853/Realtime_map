@@ -61,7 +61,7 @@ const MapComponent = ({ start, destination, transportMode }) => {
 const fetchRoute = async () => {
   try {
       const profile = transportMode === "driving" ? "car" : transportMode;
-      const routeURL = `http://localhost:5000/api/route?profile=${profile}&startLng=${start[1]}&startLat=${start[0]}&destLng=${destination[1]}&destLat=${destination[0]}`;
+      const routeURL = `https://realtime-map-o0ct.onrender.com/route?profile=${profile}&startLng=${start[1]}&startLat=${start[0]}&destLng=${destination[1]}&destLat=${destination[0]}`;
 
       const response = await fetch(routeURL);
       const data = await response.json();
