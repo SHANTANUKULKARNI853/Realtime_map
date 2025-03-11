@@ -10,28 +10,41 @@ const RoutePage = () => {
     const [destinationLocation, setDestinationLocation] = useState(''); // Destination location as text
 
     // Get current location on load
-    useEffect(() => {
-        const fetchCurrentLocation = async () => {
-            try {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const { latitude, longitude } = position.coords;
-                        setStart([latitude, longitude]);
-                        setStartLocation(`${latitude}, ${longitude}`);
-                        console.log('Current Location Coordinates:', latitude, longitude);
-                    },
-                    (error) => {
-                        console.error('Error fetching current location:', error);
-                        alert('Unable to get current location. Please allow location access.');
-                    }
-                );
-            } catch (error) {
-                console.error('Error fetching IP-based location:', error);
-            }
-        };
+   // Get current location on load
+useEffect(() => {
+    const fetchCurrentLocation = async () => {
+        try {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setStart([latitude, longitude]);
 
-        fetchCurrentLocation();
-    }, []);
+                    // Reverse geocoding to get the city name
+                    const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+                    const response = await fetch(reverseGeocodeUrl);
+                    const data = await response.json();
+
+                    let cityName = "Unknown Location";
+                    if (data.address) {
+                        cityName = data.address.city || data.address.town || data.address.village || data.address.county || "Unknown Location";
+                    }
+
+                    setStartLocation(cityName);
+                    console.log("Current Location:", cityName, latitude, longitude);
+                },
+                (error) => {
+                    console.error("Error fetching current location:", error);
+                    alert("Unable to get current location. Please allow location access.");
+                }
+            );
+        } catch (error) {
+            console.error("Error fetching location:", error);
+        }
+    };
+
+    fetchCurrentLocation();
+}, []);
+
 
     const handleStartLocationChange = (e) => {
         setStartLocation(e.target.value);
