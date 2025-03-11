@@ -6,16 +6,40 @@ const MapComponent = ({ start, destination, transportMode }) => {
 
   // Function to get the city name from coordinates
   // Reverse Geocoding to get city name from coordinates
+// Reverse Geocoding to get city name from coordinates
 const getCityName = async (lat, lng) => {
   try {
     const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
     const data = await response.json();
-    return data.address.city || data.address.town || data.address.village || "Unknown Location";
+
+    // Check for city, town, village, or display name
+    const cityName =
+      data.address.city ||
+      data.address.town ||
+      data.address.village ||
+      data.address.hamlet ||
+      data.address.county ||
+      data.address.state ||
+      data.display_name ||
+      "Unknown Location";
+
+    return cityName;
   } catch (error) {
     console.error("Error fetching city name:", error);
     return "Unknown Location";
   }
 };
+
+// Add Start Marker (Blue) with City Name
+getCityName(start[0], start[1]).then((cityName) => {
+  L.marker(start, { icon: blueIcon }).addTo(map).bindPopup(`Start Location: ${cityName}`).openPopup();
+});
+
+// Add Destination Marker (Red) with City Name
+getCityName(destination[0], destination[1]).then((cityName) => {
+  L.marker(destination, { icon: redIcon }).addTo(map).bindPopup(`Destination: ${cityName}`);
+});
+
 
 // Add Start Marker (Blue) with City Name
 getCityName(start[0], start[1]).then((cityName) => {
