@@ -1,70 +1,105 @@
-# Getting Started with Create React App
+# 🌍 Real-Time Location Map  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time map application to find routes and directions between two locations using **React**, **Leaflet**, **OpenStreetMap**, and **Express**. Supports multiple transportation modes and real-time route updates.  
 
-## Available Scripts
+🚀 **Live Demo:** [Real-Time Location Map](https://realtime-map-git-main-shantanukulkarni853-gmailcoms-projects.vercel.app/)  
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## ✨ Features  
+- Real-time location tracking on the map  
+- Multiple transportation modes (car, bike, walk)  
+- Swap start and destination locations  
+- Responsive and user-friendly interface  
+- Deployed on **Vercel** (Frontend) and **Render** (Backend)  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 💻 Tech Stack  
+**Frontend:** React, Leaflet, React-Leaflet, Axios, React Router DOM, Mapbox GL, React Icons  
+**Backend:** Node.js, Express, Axios, CORS  
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Getting Started  
 
-### `npm run build`
+### Installation  
+1. **Clone the repository:**  
+   ```bash
+   git clone https://github.com/yourusername/real-time-map.git
+   cd real-time-map
+   ```
+2. **Install frontend dependencies:**  
+   ```bash
+   npm install
+   ```
+3. **Install backend dependencies:**  
+   ```bash
+   cd server
+   npm install
+   ```
+   
+### Run Locally  
+1. **Start the backend server:**  
+   ```bash
+   npm start
+   ```
+   Runs on **http://localhost:5000**  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Start the frontend:**  
+   ```bash
+   npm start
+   ```
+   Runs on **http://localhost:3000**  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🌐 Deployment  
 
-### `npm run eject`
+### Frontend (Vercel)  
+1. Connect repo to Vercel and deploy.  
+2. Build Command: `npm run build`  
+3. Output Directory: `build`  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend (Render)  
+1. Create a **Web Service** on Render and connect your repo.  
+2. Set commands:  
+   - **Build:** `npm install`  
+   - **Start:** `node server/server.js`  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🗺️ Usage  
+1. Open the deployed frontend URL.  
+2. Enter start and destination locations.  
+3. Choose a transportation mode.  
+4. View the route, distance, and duration.  
+5. Swap locations if needed.  
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## 📂 Project Structure  
+```
+real-time-map/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+├── server/
+│   └── server.js
+├── package.json
+└── README.md
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🙌 Acknowledgements  
+- [OpenStreetMap](https://www.openstreetmap.org/)  
+- [OSRM](http://project-osrm.org/)  
+- [Leaflet](https://leafletjs.com/)  
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Made with ❤️ by Shantanu Kulkarni  
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Let me know if you want more improvements! 😊
