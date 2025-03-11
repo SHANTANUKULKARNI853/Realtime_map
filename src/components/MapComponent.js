@@ -57,17 +57,13 @@ const MapComponent = ({ start, destination, transportMode }) => {
     // Fetch Route
     // Fetch Route
 // Fetch Route
+// Fetch Route
 const fetchRoute = async () => {
   try {
-      const profile = "driving"; // Use "driving" consistently
+      const profile = transportMode === "driving" ? "car" : transportMode;
       const routeURL = `https://router.project-osrm.org/route/v1/${profile}/${start[1]},${start[0]};${destination[1]},${destination[0]}?geometries=geojson&overview=full`;
 
       const response = await fetch(routeURL);
-
-      if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
       const data = await response.json();
 
       if (data.routes && data.routes.length > 0) {
@@ -75,10 +71,10 @@ const fetchRoute = async () => {
           const coordinates = route.geometry.coordinates;
           const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
 
-          // Calculate distance and duration
-          const distance = (route.distance / 1000).toFixed(2); // km
-          const hours = Math.floor(route.duration / 3600); // hours
-          const minutes = Math.floor((route.duration % 3600) / 60); // minutes
+          // Calculate distance (in km) and duration (in hours and minutes)
+          const distance = (route.distance / 1000).toFixed(2); // Convert meters to km
+          const hours = Math.floor(route.duration / 3600); // Convert seconds to hours
+          const minutes = Math.floor((route.duration % 3600) / 60); // Remaining minutes
           const duration = hours > 0 ? `${hours} hrs ${minutes} mins` : `${minutes} mins`;
 
           // Draw Route
@@ -91,7 +87,7 @@ const fetchRoute = async () => {
               .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
               .openOn(map);
       } else {
-          alert("No route data available. Please check the locations.");
+          alert("No route data available");
       }
   } catch (error) {
       console.error("Error fetching route:", error);
