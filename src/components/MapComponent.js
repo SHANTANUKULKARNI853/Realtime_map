@@ -58,6 +58,7 @@ const MapComponent = ({ start, destination, transportMode }) => {
     // Fetch Route
 // Fetch Route
 // Fetch Route
+// Fetch Route
 const fetchRoute = async () => {
   try {
       const profile = transportMode === "driving" ? "car" : transportMode;
@@ -71,16 +72,17 @@ const fetchRoute = async () => {
           const coordinates = route.geometry.coordinates;
           const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
 
-          // Draw Route
+          const distance = (route.distance / 1000).toFixed(2);
+          const hours = Math.floor(route.duration / 3600);
+          const minutes = Math.floor((route.duration % 3600) / 60);
+          const duration = hours > 0 ? `${hours} hrs ${minutes} mins` : `${minutes} mins`;
+
           const polyline = L.polyline(latLngs, { color: "blue" }).addTo(map);
           map.fitBounds(polyline.getBounds());
 
-          // Show distance and duration
-          const distance = (route.distance / 1000).toFixed(2);
-          const duration = (route.duration / 60).toFixed(2);
           L.popup()
               .setLatLng(latLngs[0])
-              .setContent(`Distance: ${distance} km<br>Duration: ${duration} mins`)
+              .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
               .openOn(map);
       } else {
           alert("No route data available");

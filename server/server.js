@@ -6,10 +6,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
-app.use(express.json());
 
-// Route to fetch the route data from OSRM
-app.get("/api/route", async (req, res) => {
+app.get("/route", async (req, res) => {
     const { profile, startLng, startLat, destLng, destLat } = req.query;
     const osrmUrl = `https://router.project-osrm.org/route/v1/${profile}/${startLng},${startLat};${destLng},${destLat}?geometries=geojson&overview=full`;
 
