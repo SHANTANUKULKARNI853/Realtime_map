@@ -85,6 +85,7 @@ const MapComponent = ({ start, destination, transportMode }) => {
         }
       } catch (error) {
         console.error("Error fetching route:", error);
+        alert("Failed to fetch route data. Please check your internet connection and try again.");
       }
     };
 
