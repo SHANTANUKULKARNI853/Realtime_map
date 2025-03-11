@@ -1,0 +1,17 @@
+.map-container {
+    height: 80vh;
+    width: 80vw;
+    margin: 16px;
+    border-radius: 8px;
+  }
+  .route-info {
+    margin: 10px auto;
+    padding: 8px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
