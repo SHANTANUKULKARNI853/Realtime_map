@@ -4,6 +4,20 @@ import L from "leaflet";
 const MapComponent = ({ start, destination, transportMode }) => {
   const [mapView, setMapView] = useState("standard");
 
+  // Function to get the city name from coordinates
+  const getCityName = async (lat, lng) => {
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+      );
+      const data = await response.json();
+      return data.address.city || data.address.town || data.address.village || "Unknown Location";
+    } catch (error) {
+      console.error("Error fetching city name:", error);
+      return "Unknown Location";
+    }
+  };
+
   useEffect(() => {
     // Fix for map container already initialized error
     if (L.DomUtil.get("map") !== null) {
@@ -48,11 +62,24 @@ const MapComponent = ({ start, destination, transportMode }) => {
           : '&copy; OpenStreetMap contributors | CartoDB',
     }).addTo(map);
 
-    // Add Start Marker (Blue)
-    L.marker(start, { icon: blueIcon }).addTo(map).bindPopup("Start Location").openPopup();
+    // Fetch and display city names for start and destination
+    const showCityNames = async () => {
+      const startCity = await getCityName(start[0], start[1]);
+      const destCity = await getCityName(destination[0], destination[1]);
 
-    // Add Destination Marker (Red)
-    L.marker(destination, { icon: redIcon }).addTo(map).bindPopup("Destination");
+      // Add Start Marker (Blue) with city name
+      L.marker(start, { icon: blueIcon })
+        .addTo(map)
+        .bindPopup(`Start Location: ${startCity}`)
+        .openPopup();
+
+      // Add Destination Marker (Red) with city name
+      L.marker(destination, { icon: redIcon })
+        .addTo(map)
+        .bindPopup(`Destination: ${destCity}`);
+    };
+
+    showCityNames();
 
     // Fetch Route
     const fetchRoute = async () => {
