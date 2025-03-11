@@ -10,48 +10,42 @@ const RoutePage = () => {
     const [destinationLocation, setDestinationLocation] = useState(''); // Destination location as text
 
     // Get current location on load
-    useEffect(() => {
-        const fetchCurrentLocation = async () => {
-            try {
-                navigator.geolocation.getCurrentPosition(
-                    async (position) => {
-                        const { latitude, longitude } = position.coords;
-                        setStart([latitude, longitude]);
+    // Get current location on load
+// Get current location on load
+useEffect(() => {
+    const fetchCurrentLocation = async () => {
+        try {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
 
-                        // Reverse geocoding to get the city name
-                        const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
-                        const response = await fetch(reverseGeocodeUrl);
-                        const data = await response.json();
+                    // Reverse geocoding to get the city name
+                    const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+                    const response = await fetch(reverseGeocodeUrl);
+                    const data = await response.json();
 
-                        console.log("Reverse Geocoding Response:", data);
-
-                        let cityName = "Unknown Location";
-                        if (data.address) {
-                            cityName =
-                                data.address.city ||
-                                data.address.town ||
-                                data.address.village ||
-                                data.address.county ||
-                                data.address.state_district ||
-                                data.address.suburb ||
-                                "Unknown Location";
-                        }
-
-                        setStartLocation(cityName);
-                        console.log("Current Location:", cityName, latitude, longitude);
-                    },
-                    (error) => {
-                        console.error("Error fetching current location:", error);
-                        alert("Unable to get current location. Please allow location access.");
+                    let cityName = "Unknown Location";
+                    if (data.address) {
+                        cityName = data.address.city || data.address.town || data.address.village || data.address.county || "Unknown Location";
                     }
-                );
-            } catch (error) {
-                console.error("Error fetching location:", error);
-            }
-        };
 
-        fetchCurrentLocation();
-    }, []);
+                    setStartLocation(cityName);
+                    console.log("Current Location:", cityName);
+                },
+                (error) => {
+                    console.error("Error fetching current location:", error);
+                    alert("Unable to get current location. Please allow location access.");
+                }
+            );
+        } catch (error) {
+            console.error("Error fetching location:", error);
+        }
+    };
+
+    fetchCurrentLocation();
+}, []);
+
+
 
     const handleStartLocationChange = (e) => {
         setStartLocation(e.target.value);
