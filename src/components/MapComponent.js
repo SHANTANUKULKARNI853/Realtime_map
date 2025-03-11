@@ -59,36 +59,49 @@ const MapComponent = ({ start, destination, transportMode }) => {
 // Fetch Route
 // Fetch Route
 // Fetch Route
+// Fetch Route
 const fetchRoute = async () => {
   try {
-      const profile = transportMode === "driving" ? "car" : transportMode;
-      const routeURL = `https://realtime-map-o0ct.onrender.com/route?profile=${profile}&startLng=${start[1]}&startLat=${start[0]}&destLng=${destination[1]}&destLat=${destination[0]}`;
+    const profile = transportMode === "driving" ? "car" : transportMode;
+    const routeURL = `https://realtime-map-o0ct.onrender.com/route?profile=${profile}&startLng=${start[1]}&startLat=${start[0]}&destLng=${destination[1]}&destLat=${destination[0]}`;
 
-      const response = await fetch(routeURL);
-      const data = await response.json();
+    const response = await fetch(routeURL);
 
-      if (data.routes && data.routes.length > 0) {
-          const route = data.routes[0];
-          const coordinates = route.geometry.coordinates;
-          const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
+    if (!response.ok) {
+      throw new Error("Failed to fetch route data");
+    }
 
-          const distance = (route.distance / 1000).toFixed(2);
-          const hours = Math.floor(route.duration / 3600);
-          const minutes = Math.floor((route.duration % 3600) / 60);
-          const duration = hours > 0 ? `${hours} hrs ${minutes} mins` : `${minutes} mins`;
+    const data = await response.json();
 
-          const polyline = L.polyline(latLngs, { color: "blue" }).addTo(map);
-          map.fitBounds(polyline.getBounds());
+    if (data.routes && data.routes.length > 0) {
+      const route = data.routes[0];
+      const coordinates = route.geometry.coordinates;
+      const latLngs = coordinates.map(([lng, lat]) => [lat, lng]);
 
-          L.popup()
-              .setLatLng(latLngs[0])
-              .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
-              .openOn(map);
-      } else {
-          alert("No route data available");
-      }
+      const distance = (route.distance / 1000).toFixed(2);
+      const hours = Math.floor(route.duration / 3600);
+      const minutes = Math.floor((route.duration % 3600) / 60);
+      const duration = hours > 0 ? `${hours} hrs ${minutes} mins` : `${minutes} mins`;
+
+      const polyline = L.polyline(latLngs, { color: "blue" }).addTo(map);
+      map.fitBounds(polyline.getBounds());
+
+      L.popup()
+        .setLatLng(latLngs[0])
+        .setContent(`Distance: ${distance} km<br>Duration: ${duration}`)
+        .openOn(map);
+    } else {
+      L.popup()
+        .setLatLng(start)
+        .setContent("No route data available")
+        .openOn(map);
+    }
   } catch (error) {
-      console.error("Error fetching route:", error);
+    console.error("Error fetching route:", error);
+    L.popup()
+      .setLatLng(start)
+      .setContent("Error fetching route data. Please try again.")
+      .openOn(map);
   }
 };
 
